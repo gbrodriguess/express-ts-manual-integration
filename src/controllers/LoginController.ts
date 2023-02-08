@@ -1,4 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { get } from './decorators/route';
+import { controller } from './decorators/controller';
 
 @controller('/')
 class LoginController {
@@ -17,5 +19,5 @@ class LoginController {
         <button>Submit</button>
       </form>
     `);
-  });
+  };
 }
