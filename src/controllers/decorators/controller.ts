@@ -1,5 +1,6 @@
 import express from "express";
 import { Methods } from "../enum/methods";
+import { MetadataKeys } from "../enum/MetadataKeys";
 
 import { AppRouter } from "../../AppRouter";
 
@@ -8,10 +9,10 @@ export function controller(routePrefix: string) {
     const router = AppRouter.getInstance();
     for (let key in target.prototype) {
       const routeHandler = target.prototype[key];
-      const path = Reflect.getMetadata("path", target.prototype, key);
+      const path = Reflect.getMetadata(MetadataKeys.path, target.prototype, key);
 
       const method: Methods = Reflect.getMetadata(
-        "method",
+        MetadataKeys.method,
         target.prototype,
         key
       );
