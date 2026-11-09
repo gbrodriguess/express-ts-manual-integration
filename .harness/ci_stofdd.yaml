@@ -1,0 +1,49 @@
+pipeline:
+  identifier: ci_stofdd
+  name: ci-stofdd
+  orgIdentifier: default
+  projectIdentifier: maintainers
+  description: "CI/CD Python pipeline for ci-stofdd"
+  tags:
+    "created_by": "terraform"
+    "harnessSolutionsFactory": "true"
+    "managedResource": "false"
+    "module": "ci-cd-python/register-pipeline"
+    
+  template:
+    templateRef: account.cicdpython
+    versionLabel: v1
+    templateInputs:
+      properties:
+        ci:
+          codebase:
+            repoName: ci-stodd
+            build: <+input>
+      stages:
+        - stage:
+            identifier: Scans
+            template:
+              templateInputs:
+                type: SecurityTests
+                spec:
+                  execution:
+                    steps:
+                      - insert:
+                          identifier: lint
+                          steps: <+input>
+        - stage:
+            identifier: deploy
+            type: Deployment
+            spec:
+              service:
+                serviceRef: <+input>
+                serviceInputs: <+input>
+              environment:
+                environmentRef: <+input>
+                environmentInputs: <+input>
+                serviceOverrideInputs: <+input>
+                infrastructureDefinitions: <+input>
+      variables:
+        - name: IMAGE_NAME
+          type: String
+          value: <+input>
