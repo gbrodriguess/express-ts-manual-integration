@@ -1,0 +1,38 @@
+template:
+  name: Scans
+  type: Stage
+  spec:
+    type: SecurityTests
+    spec:
+      cloneCodebase: true
+      caching:
+        enabled: false
+        override: false
+        paths: []
+      execution:
+        steps:
+          - stepGroup:
+              name: Scanning and lint
+              identifier: Scanning_and_lint
+              template:
+                templateRef: account.Scan_and_Lint
+                versionLabel: v1
+          - insert:
+              name: lint
+              identifier: lint
+              steps: <+input>
+      infrastructure:
+        type: KubernetesDirect
+        spec:
+          connectorRef: account.hsf
+          namespace: core
+          automountServiceAccountToken: true
+          nodeSelector: {}
+          os: Linux
+      buildIntelligence:
+        enabled: false
+    when:
+      pipelineStatus: Success
+      condition: "false"
+  identifier: Scans
+  versionLabel: v1
